@@ -6,10 +6,10 @@
   --brand-gradient: linear-gradient(135deg, #f97316 0%, #ef4444 50%, #dc2626 100%);
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-border: rgba(255, 255, 255, 0.08);
-  --surface: #0f0f1a;
-  --surface-2: #1a1a2e;
-  --surface-3: #252540;
-  --text-primary: #f1f5f9;
+  --surface: #0a0a12;
+  --surface-2: #121220;
+  --surface-3: #18182d;
+  --text-primary: #ffffff;
   --text-secondary: #94a3b8;
   --accent: #f97316;
   --accent-hover: #fb923c;
@@ -142,16 +142,16 @@
   .form-input {
     width: 100%;
     padding: 13px 16px;
-    background: var(--glass-bg);
+    background: var(--surface-2);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
-    color: var(--text-primary);
+    color: #ffffff;
     font-family: 'Inter', sans-serif;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
   }
-  .form-input::placeholder { color: var(--text-secondary); }
+  .form-input::placeholder { color: #64748b; }
   .form-input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(249,115,22,0.15);

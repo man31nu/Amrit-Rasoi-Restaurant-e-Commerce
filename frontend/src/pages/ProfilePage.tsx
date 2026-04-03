@@ -70,10 +70,7 @@ const ProfilePage: React.FC = () => {
 
       const { data } = await api.put('/auth/profile', updateData);
       
-      dispatch(updateUser({
-        name: data.name,
-        email: data.email,
-      }));
+      dispatch(updateUser(data));
       
       toast.success('Profile updated successfully', {
         icon: <CheckCircle2 className="text-green-500" />,

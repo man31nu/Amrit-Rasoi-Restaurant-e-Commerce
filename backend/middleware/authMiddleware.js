@@ -21,8 +21,15 @@ const protect = asyncHandler(async (req, res, next) => {
           name: true,
           email: true,
           role: true,
+          phone: true,
+          address: true,
         },
       });
+
+      if (!req.user) {
+        res.status(401);
+        throw new Error('Not authorized, user not found');
+      }
 
       next();
     } catch (error) {

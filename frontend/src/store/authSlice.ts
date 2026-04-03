@@ -8,6 +8,8 @@ export interface User {
   email: string
   role: 'user' | 'admin'
   token: string
+  phone?: string
+  address?: string
 }
 
 interface AuthState {
