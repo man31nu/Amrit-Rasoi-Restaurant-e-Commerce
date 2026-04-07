@@ -7,7 +7,7 @@ import { logout } from '../store/authSlice';
 import toast from 'react-hot-toast';
 
 const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [actualScrolled, setActualScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   
@@ -21,11 +21,14 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setActualScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const isDarkHeaderPage = location.pathname === '/' || location.pathname === '/about';
+  const isScrolled = actualScrolled || !isDarkHeaderPage;
 
   // Close menus on navigation
   useEffect(() => {
@@ -40,7 +43,8 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav
+    <>
+      <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
           ? 'bg-white/80 backdrop-blur-xl shadow-lg py-3'
@@ -220,6 +224,7 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+    </nav>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -229,7 +234,7 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-white md:hidden flex flex-col p-8"
+            className="fixed inset-0 z-[60] bg-white md:hidden flex flex-col p-8 overflow-y-auto"
           >
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between mb-12">
@@ -238,7 +243,7 @@ const Navbar: React.FC = () => {
                   <UtensilsCrossed className="w-6 h-6" />
                 </div>
                 <span className="text-2xl font-black text-gray-900">
-                  Restaurant<span className="text-orange-600">X</span>
+                  Amrit<span className="text-orange-600">Rasoi</span>
                 </span>
               </div>
               <button
@@ -336,7 +341,7 @@ const Navbar: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 

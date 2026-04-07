@@ -47,7 +47,7 @@ export default function LoginPage() {
                style={{ background: 'var(--brand-gradient)' }}>
             <Utensils size={30} color="white" />
           </div>
-          <h1 className="text-3xl font-bold gradient-text">RestaurantX</h1>
+          <h1 className="text-3xl font-bold gradient-text">AmritRasoi</h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
             Premium food, delivered with love
           </p>

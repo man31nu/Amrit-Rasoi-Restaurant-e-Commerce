@@ -40,7 +40,7 @@ const CartPage: React.FC = () => {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
         amount: data.amount,
         currency: data.currency,
-        name: 'RestaurantX',
+        name: 'AmritRasoi',
         description: 'Quality Food Delivery',
         image: '/logo.svg', // Replace with your logo
         order_id: data.orderId,
