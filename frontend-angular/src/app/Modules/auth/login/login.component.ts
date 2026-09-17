@@ -1,8 +1,9 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService, ToastService } from '@services';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { AuthService, ToastService } from '@services';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
   private router = inject(Router);
@@ -22,6 +23,33 @@ export class LoginComponent {
   password = '';
   showPw = signal<boolean>(false);
   loading = signal<boolean>(false);
+
+  ngOnInit() {
+    if (typeof window !== 'undefined' && environment.googleClientId && (window as any).google?.accounts?.id) {
+      try {
+        (window as any).google.accounts.id.initialize({
+          client_id: environment.googleClientId,
+          callback: (response: any) => this.onGoogleResponse(response)
+        });
+      } catch (err) {
+        console.error('Google Auth Init error:', err);
+      }
+    }
+  }
+
+  private onGoogleResponse(response: any) {
+    if (response?.credential) {
+      this.loading.set(true);
+      this.auth.loginWithGoogle(response.credential).subscribe({
+        next: () => {
+          this.loading.set(false);
+          const redirect = this.route.snapshot.queryParams['redirect'] || '/';
+          this.router.navigateByUrl(redirect);
+        },
+        error: () => this.loading.set(false)
+      });
+    }
+  }
 
   togglePw() {
     this.showPw.update(v => !v);
@@ -44,7 +72,11 @@ export class LoginComponent {
   }
 
   handleGoogleLogin() {
-    // Trigger real Google OAuth login via Google Identity Services
+    if (!environment.googleClientId) {
+      this.toast.error('Google Sign-In requires GOOGLE_CLIENT_ID. Set it in environment.ts & backend .env.');
+      return;
+    }
+
     if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
       (window as any).google.accounts.id.prompt((notification: any) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
@@ -52,7 +84,7 @@ export class LoginComponent {
         }
       });
     } else {
-      this.toast.error('Google OAuth client is not initialized. Please set GOOGLE_CLIENT_ID.');
+      this.toast.error('Google Identity SDK loading. Please try again in a moment.');
     }
   }
 }
