@@ -72,43 +72,18 @@ export class LoginComponent implements OnInit {
   }
 
   handleGoogleLogin() {
-    if (environment.googleClientId && typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
+    if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
+      if (!environment.googleClientId) {
+        this.toast.error('Google Sign-In client ID is not configured.');
+        return;
+      }
       (window as any).google.accounts.id.prompt((notification: any) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          this.quickGoogleDemoLogin();
+          this.toast.info('Please select your Google Account or enter credentials below.');
         }
       });
     } else {
-      this.quickGoogleDemoLogin();
+      this.toast.error('Google Identity SDK loading. Please try again in a moment.');
     }
-  }
-
-  private quickGoogleDemoLogin() {
-    this.loading.set(true);
-    this.auth.signup({
-      name: 'Google User',
-      email: 'google.user@amritrasoi.com',
-      password: 'GoogleUserPassword123!'
-    }).subscribe({
-      next: () => {
-        this.loading.set(false);
-        const redirect = this.route.snapshot.queryParams['redirect'] || '/';
-        this.router.navigateByUrl(redirect);
-      },
-      error: () => {
-        // If user already exists, try logging in
-        this.auth.login({
-          email: 'google.user@amritrasoi.com',
-          password: 'GoogleUserPassword123!'
-        }).subscribe({
-          next: () => {
-            this.loading.set(false);
-            const redirect = this.route.snapshot.queryParams['redirect'] || '/';
-            this.router.navigateByUrl(redirect);
-          },
-          error: () => this.loading.set(false)
-        });
-      }
-    });
   }
 }
