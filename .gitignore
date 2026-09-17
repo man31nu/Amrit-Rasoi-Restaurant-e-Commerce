@@ -31,5 +31,7 @@ yarn-error.log*
 
 # Misc
 .vercel/
+vercel.json
 .angular/
+
 
