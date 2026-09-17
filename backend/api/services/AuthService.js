@@ -100,6 +100,10 @@ module.exports = {
       throw new Error('Invalid Google ID Token');
     }
 
+    if (!ticketPayload || !ticketPayload.email) {
+      throw new Error('Invalid Google ID Token payload');
+    }
+
     const { email, name, picture } = ticketPayload;
     let user = await UserModel.findByEmail(email);
 

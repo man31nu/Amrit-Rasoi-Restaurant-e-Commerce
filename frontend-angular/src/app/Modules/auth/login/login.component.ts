@@ -77,11 +77,15 @@ export class LoginComponent implements OnInit {
         this.toast.error('Google Sign-In client ID is not configured.');
         return;
       }
-      (window as any).google.accounts.id.prompt((notification: any) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          this.toast.info('Please select your Google Account or enter credentials below.');
-        }
-      });
+      try {
+        (window as any).google.accounts.id.prompt((notification: any) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            console.log('Google prompt status:', notification.getNotDisplayedReason?.() || notification.getSkippedReason?.());
+          }
+        });
+      } catch (err) {
+        console.error('Google prompt error:', err);
+      }
     } else {
       this.toast.error('Google Identity SDK loading. Please try again in a moment.');
     }
