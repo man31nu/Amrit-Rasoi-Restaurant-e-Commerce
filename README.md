@@ -77,7 +77,7 @@ PORT=5000
 NODE_ENV=development
 
 # Neon PostgreSQL Database URI
-DATABASE_URL=postgresql://neondb_owner:npg_7GK6XjuiYTqL@ep-spring-bar-b46ey21i-pooler.c-6.us-east-2.aws.neon.tech/amrit_rasoi?sslmode=require
+DATABASE_URL=postgresql://username:password@your-database-host.neon.tech/amrit_rasoi?sslmode=require
 
 # JWT Secret Key
 JWT_SECRET=your_jwt_secret_key
