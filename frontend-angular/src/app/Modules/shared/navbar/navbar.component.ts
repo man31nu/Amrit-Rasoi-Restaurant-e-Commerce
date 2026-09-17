@@ -2,8 +2,7 @@ import { Component, HostListener, inject, signal, ChangeDetectionStrategy } from
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { AuthService } from '@services';
-import { CartService } from '@services';
+import { AuthService, CartService, ThemeService } from '@services';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +15,7 @@ import { CartService } from '@services';
 export class NavbarComponent {
   authService = inject(AuthService);
   cartService = inject(CartService);
+  themeService = inject(ThemeService);
   private router = inject(Router);
 
   currentUrl = signal<string>('/');

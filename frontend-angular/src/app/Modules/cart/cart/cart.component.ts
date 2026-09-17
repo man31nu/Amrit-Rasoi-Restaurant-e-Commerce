@@ -32,7 +32,6 @@ export class CartComponent {
   discountAmount(): number {
     const coupon = this.appliedCoupon();
     if (!coupon) return 0;
-    // Re-verify if subtotal still meets min order amount
     if (this.subtotal() < coupon.minOrderAmount) {
       return 0;
     }

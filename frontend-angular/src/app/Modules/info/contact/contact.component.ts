@@ -21,10 +21,10 @@ export class ContactComponent {
   isSubmitting = signal<boolean>(false);
 
   contactInfos = [
-    { emoji: '📍', title: 'Visit Us', details: 'Sabour, Bhagalpur, Bihar', color: 'text-orange-600', bg: 'bg-orange-50' },
-    { emoji: '📞', title: 'Call Us', details: '+91 9876 543 210', color: 'text-blue-600', bg: 'bg-blue-50' },
-    { emoji: '✉️', title: 'Email Us', details: 'info@amrit_rasoi.com', color: 'text-green-600', bg: 'bg-green-50' },
-    { emoji: '⏰', title: 'Open Hours', details: 'Mon - Sun: 9AM - 11PM', color: 'text-purple-600', bg: 'bg-purple-50' },
+    { type: 'location', title: 'Visit Us', details: 'Sabour, Bhagalpur, Bihar', color: 'text-orange-600', bg: 'bg-orange-50' },
+    { type: 'phone', title: 'Call Us', details: '+91 9876 543 210', color: 'text-blue-600', bg: 'bg-blue-50' },
+    { type: 'email', title: 'Email Us', details: 'info@amrit_rasoi.com', color: 'text-green-600', bg: 'bg-green-50' },
+    { type: 'hours', title: 'Open Hours', details: 'Mon - Sun: 9AM - 11PM', color: 'text-purple-600', bg: 'bg-purple-50' },
   ];
 
   handleSubmit() {

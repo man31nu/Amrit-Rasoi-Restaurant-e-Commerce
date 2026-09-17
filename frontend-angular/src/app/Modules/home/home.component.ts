@@ -22,8 +22,8 @@ export class HomeComponent implements OnInit {
   selectedCategory = signal<string>('All');
   searchQuery = signal<string>('');
   sortOption = signal<string>('newest');
-  selectedVegFilter = signal<string>('all'); // 'all', 'true', 'false'
-  selectedSpiceFilter = signal<string>('all'); // 'all', 'Mild', 'Medium', 'Spicy'
+  selectedVegFilter = signal<string>('all');
+  selectedSpiceFilter = signal<string>('all');
 
   ngOnInit() {
     this.fetchProducts();

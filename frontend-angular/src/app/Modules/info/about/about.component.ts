@@ -12,10 +12,10 @@ import { RouterLink } from '@angular/router';
 })
 export class AboutComponent {
   stats = [
-    { label: 'Year of Excellence', value: '1+', emoji: '🏆' },
-    { label: 'Master Chefs', value: '3', emoji: '👨‍🍳' },
-    { label: 'Happy Customers', value: '1k+', emoji: '❤️' },
-    { label: 'Expert Staff', value: '10+', emoji: '👥' },
+    { label: 'Year of Excellence', value: '1+', type: 'excellence' },
+    { label: 'Master Chefs', value: '3', type: 'chefs' },
+    { label: 'Happy Customers', value: '1k+', type: 'customers' },
+    { label: 'Expert Staff', value: '10+', type: 'staff' },
   ];
 
   chefs = [

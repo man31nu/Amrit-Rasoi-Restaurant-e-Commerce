@@ -19,18 +19,20 @@
       </div>
     } @else if (orders().length === 0) {
       <div class="py-20 flex flex-col items-center justify-center text-center">
-        <div class="bg-gray-100 p-8 rounded-full mb-6 text-5xl">
-          📦
+        <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-6">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
         </div>
         <h2 class="text-3xl font-black text-gray-900 mb-4">No orders yet</h2>
-        <p class="text-gray-500 mb-8 max-w-md">
+        <p class="text-gray-500 mb-8 max-w-md font-medium">
           You haven't placed any orders yet. Once you do, they will appear here!
         </p>
         <a 
           routerLink="/"
           class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-2xl font-bold transition-all active:scale-95 cursor-pointer shadow-lg shadow-orange-600/20"
         >
-          Explore Menu ➔
+          Explore Menu
         </a>
       </div>
     } @else {
@@ -40,13 +42,17 @@
             <!-- Header -->
             <div class="flex flex-wrap justify-between items-center gap-4 mb-6 pb-6 border-b border-gray-50">
               <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl text-orange-600">
-                  🛍️
+                <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                  </svg>
                 </div>
                 <div>
                   <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Order Date</p>
                   <div class="flex items-center gap-2 text-gray-900 font-bold text-sm">
-                    <span>📅</span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
                     {{ formatDate(order.createdAt) }}
                   </div>
                 </div>
@@ -63,7 +69,10 @@
             <!-- Status Stepper -->
             @if (order.status === 'cancelled') {
               <div class="py-4 px-4 bg-red-50 rounded-2xl border border-red-100 flex items-center gap-3 text-red-600 mb-6 text-sm font-bold">
-                <span>⚠️</span> This order has been cancelled and refunded.
+                <svg class="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                This order has been cancelled and refunded.
               </div>
             } @else {
               <div class="py-10 px-2 lg:px-6 relative mb-4">
@@ -80,13 +89,13 @@
                   @for (step of steps; track step.id; let idx = $index) {
                     <div class="flex flex-col items-center gap-3">
                       <div 
-                        class="w-10 h-10 rounded-2xl border-2 flex items-center justify-center transition-colors text-sm"
+                        class="w-10 h-10 rounded-2xl border-2 flex items-center justify-center transition-colors text-sm font-bold"
                         [ngClass]="{
                           'bg-orange-600 border-orange-600 text-white shadow-lg shadow-orange-600/30': idx <= getStepIndex(order.status),
                           'bg-white border-gray-100 text-gray-300': idx > getStepIndex(order.status)
                         }"
                       >
-                        {{ step.emoji }}
+                        {{ step.stepNum }}
                       </div>
                       <span 
                         class="text-[9px] lg:text-[10px] font-black uppercase tracking-[0.1em] text-center"
@@ -117,7 +126,9 @@
                     </div>
                   </div>
                   <a [routerLink]="['/product', item.productId]" class="p-2 text-gray-300 hover:text-orange-600 transition-colors">
-                    ↗
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
                   </a>
                 </div>
               }

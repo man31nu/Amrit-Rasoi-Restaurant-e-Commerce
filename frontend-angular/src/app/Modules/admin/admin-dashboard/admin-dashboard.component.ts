@@ -11,7 +11,6 @@ type AdminTab = 'stats' | 'products' | 'orders' | 'users';
 interface MenuItem {
   id: AdminTab;
   label: string;
-  emoji: string;
 }
 
 @Component({
@@ -34,10 +33,10 @@ export class AdminDashboardComponent {
   activeTab = signal<AdminTab>('stats');
 
   menuItems: MenuItem[] = [
-    { id: 'stats', label: 'Overview', emoji: '📊' },
-    { id: 'products', label: 'Inventory', emoji: '📦' },
-    { id: 'orders', label: 'Live Orders', emoji: '🛍️' },
-    { id: 'users', label: 'User Roles', emoji: '👥' },
+    { id: 'stats', label: 'Overview' },
+    { id: 'products', label: 'Inventory' },
+    { id: 'orders', label: 'Live Orders' },
+    { id: 'users', label: 'User Roles' },
   ];
 
   getActiveTitle(): string {

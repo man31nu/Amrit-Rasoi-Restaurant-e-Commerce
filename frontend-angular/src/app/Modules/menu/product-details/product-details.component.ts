@@ -26,7 +26,6 @@ export class ProductDetailsComponent implements OnInit {
   loading = signal<boolean>(true);
   quantity = signal<number>(1);
 
-  // Review Form state
   newRating = signal<number>(5);
   newComment = signal<string>('');
   submittingReview = signal<boolean>(false);
@@ -97,7 +96,7 @@ export class ProductDetailsComponent implements OnInit {
         this.newComment.set('');
         this.newRating.set(5);
         this.submittingReview.set(false);
-        this.loadProductDetails(); // Refresh reviews and average rating
+        this.loadProductDetails();
       },
       error: (err) => {
         this.toast.error(err.error?.message || 'Failed to submit review');

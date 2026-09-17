@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 export interface CategoryItem {
   id: string;
   name: string;
-  emoji: string;
 }
 
 @Component({
@@ -20,13 +19,13 @@ export class CategoryFilterComponent {
   @Output() categoryChange = new EventEmitter<string>();
 
   categories: CategoryItem[] = [
-    { id: 'All', name: 'All Menu', emoji: '🍽️' },
-    { id: 'Veg Main Course', name: 'Veg Main', emoji: '🌱' },
-    { id: 'Non-Veg Main Course', name: 'Non-Veg', emoji: '🍗' },
-    { id: 'Pizza', name: 'Pizza', emoji: '🍕' },
-    { id: 'Burgers', name: 'Burgers', emoji: '🍔' },
-    { id: 'Desserts', name: 'Desserts', emoji: '🍨' },
-    { id: 'Drinks', name: 'Drinks', emoji: '🍹' },
+    { id: 'All', name: 'All Menu' },
+    { id: 'Veg Main Course', name: 'Veg Main' },
+    { id: 'Non-Veg Main Course', name: 'Non-Veg' },
+    { id: 'Pizza', name: 'Pizza' },
+    { id: 'Burgers', name: 'Burgers' },
+    { id: 'Desserts', name: 'Desserts' },
+    { id: 'Drinks', name: 'Drinks' },
   ];
 
   selectCategory(id: string) {

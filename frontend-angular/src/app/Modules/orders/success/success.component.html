@@ -1,8 +1,10 @@
 <div class="min-h-screen pt-32 pb-20 flex items-center justify-center bg-gray-50/50">
   <div class="container mx-auto px-6 max-w-2xl">
     <div class="bg-white rounded-[3rem] p-12 shadow-2xl shadow-green-600/5 text-center border border-gray-100 animate-fadeUp">
-      <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl">
-        ✓
+      <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
+        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
       </div>
 
       <h1 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">
@@ -24,13 +26,13 @@
           routerLink="/orders"
           class="bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg cursor-pointer"
         >
-          <span>🛍️</span> View My Orders
+          View My Orders
         </a>
         <a
           routerLink="/"
           class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm cursor-pointer"
         >
-          Back to Menu ➔
+          Back to Menu
         </a>
       </div>
     </div>

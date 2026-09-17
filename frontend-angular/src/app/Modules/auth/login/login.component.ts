@@ -2,7 +2,7 @@ import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '@services';
+import { AuthService, ToastService } from '@services';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +14,7 @@ import { AuthService } from '@services';
 })
 export class LoginComponent {
   private auth = inject(AuthService);
+  private toast = inject(ToastService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -40,5 +41,18 @@ export class LoginComponent {
         this.loading.set(false);
       },
     });
+  }
+
+  handleGoogleLogin() {
+    // Trigger real Google OAuth login via Google Identity Services
+    if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
+      (window as any).google.accounts.id.prompt((notification: any) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          this.toast.error('Google Sign-In prompt unavailable. Please enter credentials directly.');
+        }
+      });
+    } else {
+      this.toast.error('Google OAuth client is not initialized. Please set GOOGLE_CLIENT_ID.');
+    }
   }
 }

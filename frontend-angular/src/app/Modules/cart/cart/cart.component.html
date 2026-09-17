@@ -5,8 +5,10 @@
         <div class="relative mb-10">
           <div class="absolute inset-0 bg-orange-200 blur-3xl opacity-20 rounded-full animate-pulse"></div>
           <div class="relative bg-white p-12 rounded-[3.5rem] shadow-2xl border border-orange-100/50 max-w-lg">
-            <div class="bg-orange-50 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl text-orange-600">
-              🛍️
+            <div class="bg-orange-50 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 text-orange-600">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              </svg>
             </div>
             <h2 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">
               Your cart is <span class="text-orange-600">empty</span>
@@ -19,7 +21,7 @@
               routerLink="/"
               class="inline-flex items-center gap-3 bg-orange-600 hover:bg-orange-700 text-white px-10 py-5 rounded-[2rem] font-bold text-lg shadow-xl shadow-orange-600/20 transition-all hover:shadow-orange-600/40 active:scale-95 cursor-pointer"
             >
-              Start Ordering ➔
+              Start Ordering
             </a>
           </div>
         </div>
@@ -50,10 +52,12 @@
                   </div>
                   <button
                     (click)="cartService.removeFromCart(item.id)"
-                    class="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all cursor-pointer text-lg"
+                    class="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all cursor-pointer"
                     title="Remove Item"
                   >
-                    🗑️
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
                   </button>
                 </div>
 
@@ -94,7 +98,7 @@
             <!-- Promo Code Input Form -->
             <div class="bg-gray-50/80 p-4 rounded-2xl border border-gray-100 space-y-3">
               <label class="block text-xs font-black text-gray-700 uppercase tracking-wider">
-                🎟️ Have a Promo Code?
+                Have a Promo Code?
               </label>
 
               @if (appliedCoupon(); as c) {
@@ -153,7 +157,7 @@
               @if (discountAmount() > 0) {
                 <div class="flex justify-between text-emerald-600 font-bold">
                   <span class="flex items-center gap-1 text-xs">
-                    <span>🏷️</span> Promo Savings
+                    Promo Savings
                   </span>
                   <span>-₹{{ discountAmount().toFixed(2) }}</span>
                 </div>
@@ -187,7 +191,7 @@
                 <div class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 <span>Processing...</span>
               } @else {
-                <span>Checkout Now 💳</span>
+                <span>Checkout Now</span>
               }
             </button>
 

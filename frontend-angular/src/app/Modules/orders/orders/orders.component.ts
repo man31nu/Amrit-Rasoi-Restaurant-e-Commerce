@@ -8,7 +8,7 @@ import { ToastService } from '@services';
 interface Step {
   id: string;
   label: string;
-  emoji: string;
+  stepNum: string;
 }
 
 @Component({
@@ -27,10 +27,10 @@ export class OrdersComponent implements OnInit {
   loading = signal<boolean>(true);
 
   steps: Step[] = [
-    { id: 'paid', label: 'Confirmed', emoji: '✓' },
-    { id: 'preparing', label: 'Kitchen', emoji: '🍳' },
-    { id: 'out-for-delivery', label: 'Shipping', emoji: '🚚' },
-    { id: 'delivered', label: 'Arrived', emoji: '📍' },
+    { id: 'paid', label: 'Confirmed', stepNum: '1' },
+    { id: 'preparing', label: 'Kitchen', stepNum: '2' },
+    { id: 'out-for-delivery', label: 'Shipping', stepNum: '3' },
+    { id: 'delivered', label: 'Arrived', stepNum: '4' },
   ];
 
   ngOnInit() {
