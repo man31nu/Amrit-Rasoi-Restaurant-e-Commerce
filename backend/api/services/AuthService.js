@@ -22,7 +22,12 @@ module.exports = {
   registerUser: async (payload) => {
     const { name, email, password, phone, address, city, pincode } = payload;
 
-    const existingUser = await UserModel.findByEmail(email);
+    if (!email || !password || !name) {
+      throw new Error('Name, email, and password are required');
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const existingUser = await UserModel.findByEmail(cleanEmail);
     if (existingUser) {
       throw new Error('User already exists');
     }
@@ -31,8 +36,8 @@ module.exports = {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await UserModel.createUser({
-      name,
-      email,
+      name: name.trim(),
+      email: cleanEmail,
       password: hashedPassword,
       phone,
       address,
@@ -40,6 +45,8 @@ module.exports = {
       pincode,
       createdBy: 'self_register'
     });
+
+    delete user.password;
 
     return {
       ...user,
@@ -50,7 +57,12 @@ module.exports = {
   authUser: async (payload) => {
     const { email, password } = payload;
 
-    const user = await UserModel.findByEmail(email);
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await UserModel.findByEmail(cleanEmail);
     if (!user) {
       throw new Error('Invalid email or password');
     }

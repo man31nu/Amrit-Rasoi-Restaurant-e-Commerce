@@ -8,9 +8,10 @@ const db = require('../config/poolConnection');
 
 module.exports = {
   findByEmail: async (email) => {
+    const clean = (email || '').trim().toLowerCase();
     const { rows } = await db.query(
-      'SELECT user_id AS "id", user_id AS "userId", name, email, password, role, phone, address, city, pincode, avatar_url AS "avatarUrl", loyalty_points AS "loyaltyPoints", status, is_verified AS "isVerified" FROM users WHERE email = $1',
-      [email]
+      'SELECT user_id AS "id", user_id AS "userId", name, email, password, role, phone, address, city, pincode, avatar_url AS "avatarUrl", loyalty_points AS "loyaltyPoints", status, is_verified AS "isVerified" FROM users WHERE LOWER(email) = LOWER($1)',
+      [clean]
     );
     return rows[0] || null;
   },
