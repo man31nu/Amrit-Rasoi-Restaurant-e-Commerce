@@ -11,7 +11,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        // Unauthorized - session expired or invalid credentials
         if (!req.url.includes('/login') && !req.url.includes('/signup')) {
           toast.error('Session expired. Please sign in again.');
           router.navigate(['/login']);
