@@ -1,9 +1,8 @@
-import { Component, inject, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
-import { AuthService, ToastService } from '@services';
-import { environment } from '@environments/environment';
+import { AuthService, ToastService, GoogleAuthService } from '@services';
 
 @Component({
   selector: 'app-signup',
@@ -13,10 +12,13 @@ import { environment } from '@environments/environment';
   styleUrl: './signup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, AfterViewInit {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
+  private googleAuth = inject(GoogleAuthService);
   private router = inject(Router);
+
+  @ViewChild('googleBtnContainer') googleBtnContainer!: ElementRef<HTMLDivElement>;
 
   name = '';
   email = '';
@@ -26,29 +28,26 @@ export class SignupComponent implements OnInit {
   loading = signal<boolean>(false);
 
   ngOnInit() {
-    if (typeof window !== 'undefined' && environment.googleClientId && (window as any).google?.accounts?.id) {
-      try {
-        (window as any).google.accounts.id.initialize({
-          client_id: environment.googleClientId,
-          callback: (response: any) => this.onGoogleResponse(response)
-        });
-      } catch (err) {
-        console.error('Google Auth Init error:', err);
-      }
+    this.googleAuth.setCallback((response) => this.onGoogleResponse(response));
+  }
+
+  ngAfterViewInit() {
+    if (this.googleBtnContainer?.nativeElement) {
+      this.googleAuth.renderButton(this.googleBtnContainer.nativeElement);
     }
   }
 
   private onGoogleResponse(response: any) {
-    if (response?.credential) {
-      this.loading.set(true);
-      this.auth.loginWithGoogle(response.credential).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.router.navigate(['/']);
-        },
-        error: () => this.loading.set(false)
-      });
-    }
+    if (!response?.credential) return;
+
+    this.loading.set(true);
+    this.auth.loginWithGoogle(response.credential).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.router.navigate(['/']);
+      },
+      error: () => this.loading.set(false)
+    });
   }
 
   togglePw() {
@@ -71,29 +70,15 @@ export class SignupComponent implements OnInit {
         this.loading.set(false);
         this.router.navigate(['/']);
       },
-      error: () => {
-        this.loading.set(false);
-      },
+      error: () => this.loading.set(false),
     });
   }
 
-  handleGoogleLogin() {
-    if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
-      if (!environment.googleClientId) {
-        this.toast.error('Google Sign-In client ID is not configured.');
-        return;
-      }
-      try {
-        (window as any).google.accounts.id.prompt((notification: any) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            console.log('Google prompt status:', notification.getNotDisplayedReason?.() || notification.getSkippedReason?.());
-          }
-        });
-      } catch (err) {
-        console.error('Google prompt error:', err);
-      }
-    } else {
-      this.toast.error('Google Identity SDK loading. Please try again in a moment.');
+  async handleGoogleLogin() {
+    try {
+      await this.googleAuth.prompt();
+    } catch (err: any) {
+      this.toast.error(err?.message || 'Google Sign-In failed. Please try again.');
     }
   }
 }

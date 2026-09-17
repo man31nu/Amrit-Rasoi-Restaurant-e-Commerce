@@ -1,8 +1,7 @@
 import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '@models';
-import { AuthService } from '@services';
-import { ToastService } from '@services';
+import { AuthService, ToastService } from '@services';
 
 @Component({
   selector: 'app-admin-users',
@@ -47,14 +46,5 @@ export class AdminUsersComponent implements OnInit {
         this.toast.error('Failed to update role');
       },
     });
-  }
-
-  formatDate(dateStr?: string): string {
-    if (!dateStr) return 'N/A';
-    try {
-      return new Date(dateStr).toLocaleDateString();
-    } catch {
-      return dateStr;
-    }
   }
 }

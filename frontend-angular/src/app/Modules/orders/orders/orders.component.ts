@@ -2,8 +2,7 @@ import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@ang
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Order } from '@models';
-import { OrderService } from '@services';
-import { ToastService } from '@services';
+import { OrderService, ToastService } from '@services';
 
 interface Step {
   id: string;
@@ -56,17 +55,5 @@ export class OrdersComponent implements OnInit {
     const idx = this.getStepIndex(status);
     if (idx < 0) return 0;
     return (idx / (this.steps.length - 1)) * 100;
-  }
-
-  formatDate(dateStr: string): string {
-    try {
-      return new Date(dateStr).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      });
-    } catch {
-      return dateStr;
-    }
   }
 }

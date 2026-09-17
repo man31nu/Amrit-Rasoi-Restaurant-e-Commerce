@@ -34,8 +34,8 @@
                   {{ user.role }}
                 </span>
               </td>
-              <td class="px-6 py-4 text-sm text-gray-500">
-                {{ formatDate(user.createdAt) }}
+              <td class="px-6 py-4 text-xs font-medium text-gray-600 whitespace-nowrap">
+                {{ user.createdAt | date:'d MMM yyyy, h:mm a' }}
               </td>
               <td class="px-6 py-4 text-right">
                 <button
