@@ -18,6 +18,8 @@ app.use(express.json());
 app.use(cors({ origin: '*' }));
 app.use(morgan('dev'));
 
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 app.get('/', (req, res) => {
   res.send('Restaurant API is running...');
 });
