@@ -2,9 +2,9 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/package.json",
+      "src": "frontend-angular/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": { "distDir": "dist/frontend-angular/browser" }
     }
   ],
   "rewrites": [
@@ -12,6 +12,7 @@
       "source": "/api/(.*)",
       "destination": "https://your-backend-url.render.com/api/$1"
     },
-    { "source": "/(.*)", "destination": "/frontend/$1" }
+    { "source": "/(.*)", "destination": "/frontend-angular/$1" }
   ]
 }
+
