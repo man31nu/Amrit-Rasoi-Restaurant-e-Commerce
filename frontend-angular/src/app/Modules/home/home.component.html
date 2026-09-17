@@ -1,0 +1,252 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <section class="relative h-[80vh] flex items-center overflow-hidden bg-gray-900">
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <img
+        src="https://images.unsplash.com/photo-1601050638917-3d8487b2030d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+        alt=""
+        aria-hidden="true"
+        class="w-full h-full object-cover opacity-50 select-none pointer-events-none text-transparent"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent"></div>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+        <!-- Left Column: Content -->
+        <div class="text-white text-center lg:text-left">
+          <div class="flex items-center justify-center lg:justify-start gap-3 text-orange-500 font-black mb-6 tracking-[0.3em] uppercase text-xs">
+            <div class="h-[2px] w-10 bg-orange-500"></div>
+            - Mannu Yadav
+          </div>
+
+          <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-black mb-8 leading-[0.9] tracking-tighter">
+            Artistic <span class="text-orange-600">Flavors</span> <br />
+            At Your Doorstep
+          </h1>
+
+          <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-xl lg:mx-0 mx-auto leading-relaxed font-medium">
+            Experience the finest culinary creations from our top-rated chefs,
+            made with fresh organic ingredients and delivered hot to your doorstep.
+          </p>
+
+          <div class="flex flex-wrap justify-center lg:justify-start gap-6 items-center">
+            <button
+              (click)="scrollToMenu()"
+              class="bg-orange-600 hover:bg-orange-700 text-white px-10 py-5 rounded-[2rem] font-black text-lg flex items-center gap-3 transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              Order Now
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Hero Graphic -->
+        <div class="hidden lg:block relative">
+          <div class="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/10">
+            <img
+              src="/images/indian-heritage.png"
+              alt="Indian Culinary Heritage"
+              class="w-full h-auto object-cover"
+            />
+          </div>
+          <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-orange-600 rounded-[2.5rem] -z-10"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute -right-20 -bottom-20 w-[40rem] h-[40rem] bg-orange-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+  </section>
+
+  <!-- Categories & Menu Section -->
+  <section id="menu-section" class="container mx-auto px-6 py-16">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+      <div class="max-w-xl">
+        <h2 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">
+          Explore Our <span class="text-orange-600">Menu</span>
+        </h2>
+        <p class="text-gray-500 text-lg">
+          Find your favorite dishes from our diverse collection of categories.
+        </p>
+      </div>
+
+      <!-- Search & Filter Controls -->
+      <div class="flex flex-col xl:flex-row gap-4 w-full md:w-auto flex-wrap items-center">
+        <!-- Search -->
+        <div class="relative group w-full md:w-72">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-orange-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search for dishes..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="onSearchChange($event)"
+            class="w-full bg-white border border-gray-200 rounded-2xl py-4 pl-12 pr-6 shadow-sm focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all outline-none text-gray-800 placeholder-gray-400 font-medium"
+          />
+        </div>
+
+        <!-- Dietary Veg/Non-Veg Filter Buttons (Square Emblems) -->
+        <div class="flex items-center bg-white p-1.5 border border-gray-200 rounded-2xl shadow-sm gap-1 w-full md:w-auto">
+          <button
+            (click)="onVegFilterChange('all')"
+            [class.bg-orange-600]="selectedVegFilter() === 'all'"
+            [class.text-white]="selectedVegFilter() === 'all'"
+            [class.text-gray-600]="selectedVegFilter() !== 'all'"
+            class="px-4 py-2.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer"
+          >
+            All
+          </button>
+          <button
+            (click)="onVegFilterChange('true')"
+            [class.bg-emerald-50]="selectedVegFilter() === 'true'"
+            [class.border-emerald-300]="selectedVegFilter() === 'true'"
+            [class.text-emerald-800]="selectedVegFilter() === 'true'"
+            [class.text-gray-600]="selectedVegFilter() !== 'true'"
+            class="px-3 py-2.5 rounded-xl font-bold text-xs border border-transparent transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <span class="w-4 h-4 border-2 border-emerald-600 rounded-sm bg-white flex items-center justify-center">
+              <span class="w-2 h-2 bg-emerald-600 rounded-[1px]"></span>
+            </span>
+            Veg
+          </button>
+          <button
+            (click)="onVegFilterChange('false')"
+            [class.bg-rose-50]="selectedVegFilter() === 'false'"
+            [class.border-rose-300]="selectedVegFilter() === 'false'"
+            [class.text-rose-800]="selectedVegFilter() === 'false'"
+            [class.text-gray-600]="selectedVegFilter() !== 'false'"
+            class="px-3 py-2.5 rounded-xl font-bold text-xs border border-transparent transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <span class="w-4 h-4 border-2 border-rose-600 rounded-sm bg-white flex items-center justify-center">
+              <span class="w-2 h-2 bg-rose-600 rounded-[1px]"></span>
+            </span>
+            Non-Veg
+          </button>
+        </div>
+
+        <!-- Spice Level Filter -->
+        <div class="relative group w-full md:w-48">
+          <select
+            [ngModel]="selectedSpiceFilter()"
+            (ngModelChange)="onSpiceFilterChange($event)"
+            class="w-full bg-white border border-gray-200 rounded-2xl py-4 pl-4 pr-8 shadow-sm focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all outline-none text-gray-800 font-bold text-sm appearance-none cursor-pointer"
+          >
+            <option value="all">🌶️ All Spice Levels</option>
+            <option value="Mild">🌶️ Mild</option>
+            <option value="Medium">🌶️🌶️ Medium</option>
+            <option value="Spicy">🌶️🌶️🌶️ Spicy</option>
+          </select>
+          <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Sort Option -->
+        <div class="relative group w-full md:w-52">
+          <select
+            [ngModel]="sortOption()"
+            (ngModelChange)="onSortChange($event)"
+            class="w-full bg-white border border-gray-200 rounded-2xl py-4 pl-4 pr-8 shadow-sm focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all outline-none text-gray-800 font-bold text-sm appearance-none cursor-pointer"
+          >
+            <option value="newest">Newest Arrivals</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+          </select>
+          <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Pills -->
+    <app-category-filter
+      [selectedCategory]="selectedCategory()"
+      (categoryChange)="onCategoryChange($event)"
+    ></app-category-filter>
+
+    <!-- Product Grid -->
+    <div class="mt-12">
+      @if (loading()) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm h-[420px] animate-pulse border border-gray-100 flex flex-col">
+              <div class="bg-gray-200 h-48 w-full"></div>
+              <div class="p-5 flex-grow space-y-4">
+                <div class="flex justify-between items-start">
+                  <div class="h-7 w-3/5 bg-gray-200 rounded-lg"></div>
+                  <div class="h-7 w-1/4 bg-gray-200 rounded-lg"></div>
+                </div>
+                <div class="space-y-2">
+                  <div class="h-4 w-full bg-gray-100 rounded-md"></div>
+                  <div class="h-4 w-4/5 bg-gray-100 rounded-md"></div>
+                </div>
+                <div class="pt-6 mt-auto border-t border-gray-50 flex justify-between items-center">
+                  <div class="h-4 w-1/3 bg-gray-100 rounded-full"></div>
+                  <div class="h-11 w-24 bg-gray-200 rounded-xl"></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else if (products().length === 0) {
+        <div class="flex flex-col items-center justify-center py-20 text-center">
+          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-3xl">
+            🍽️
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">No items found</h3>
+          <p class="text-gray-500">Try selecting a different category or refining your search.</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          @for (product of products(); track product.id; let idx = $index) {
+            <app-product-card [product]="product" [index]="idx"></app-product-card>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Featured Promo Banner -->
+  <section class="bg-gradient-to-br from-orange-600 to-orange-700 py-16 mt-16 mb-8 overflow-hidden relative text-white rounded-3xl mx-4 sm:mx-6 lg:mx-auto lg:container shadow-xl">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+      <div class="w-full md:w-1/2 text-center md:text-left">
+        <h3 class="text-3xl md:text-4xl font-black mb-6 leading-tight">
+          Get <span class="underline decoration-white/30 truncate">20% Discount</span> On Your First Order!
+        </h3>
+        <p class="text-orange-100 text-base md:text-lg mb-8 opacity-90">
+          Use code <span class="bg-white/20 px-3 py-1 rounded-lg font-mono font-bold">WELCOME20</span> at checkout.
+        </p>
+        <button
+          (click)="scrollToMenu()"
+          class="bg-white text-orange-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-orange-50 transition-colors shadow-lg cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+        >
+          Claim Offer Now
+        </button>
+      </div>
+
+      <div class="w-full md:w-1/2 relative mt-12 md:mt-0 flex justify-center">
+        <div class="relative w-full max-w-lg">
+          <div class="absolute -inset-2 bg-gradient-to-r from-amber-400 to-orange-500 rounded-[2.5rem] blur-xl opacity-30"></div>
+          <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/25 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-500">
+            <img
+              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              alt="Featured Indian Biryani"
+              class="w-full h-72 sm:h-80 md:h-96 object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

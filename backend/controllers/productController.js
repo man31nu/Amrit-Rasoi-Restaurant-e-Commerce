@@ -5,7 +5,7 @@ const prisma = require('../prisma/client');
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const { search, category, sortBy, order } = req.query;
+  const { search, category, sortBy, order, isVeg, spiceLevel } = req.query;
 
   const whereOptions = {};
 
@@ -20,6 +20,14 @@ const getProducts = asyncHandler(async (req, res) => {
     whereOptions.category = category;
   }
 
+  if (isVeg !== undefined && isVeg !== 'all') {
+    whereOptions.isVeg = isVeg === 'true';
+  }
+
+  if (spiceLevel && spiceLevel !== 'all') {
+    whereOptions.spiceLevel = spiceLevel;
+  }
+
   // Handle sorting
   let orderBy = { createdAt: 'desc' }; // default
   
@@ -32,9 +40,29 @@ const getProducts = asyncHandler(async (req, res) => {
   const products = await prisma.product.findMany({
     where: whereOptions,
     orderBy: orderBy,
+    include: {
+      reviews: {
+        select: {
+          rating: true
+        }
+      }
+    }
   });
 
-  res.json(products);
+  const formattedProducts = products.map((prod) => {
+    const numReviews = prod.reviews.length;
+    const avgRating = numReviews > 0
+      ? Number((prod.reviews.reduce((sum, r) => sum + r.rating, 0) / numReviews).toFixed(1))
+      : 4.8; // default benchmark rating if none submitted yet
+    const { reviews, ...rest } = prod;
+    return {
+      ...rest,
+      numReviews,
+      avgRating
+    };
+  });
+
+  res.json(formattedProducts);
 });
 
 // @desc    Fetch single product
@@ -43,10 +71,33 @@ const getProducts = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req, res) => {
   const product = await prisma.product.findUnique({
     where: { id: req.params.id },
+    include: {
+      reviews: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      }
+    }
   });
 
   if (product) {
-    res.json(product);
+    const numReviews = product.reviews.length;
+    const avgRating = numReviews > 0
+      ? Number((product.reviews.reduce((sum, r) => sum + r.rating, 0) / numReviews).toFixed(1))
+      : 4.8;
+    res.json({
+      ...product,
+      numReviews,
+      avgRating
+    });
   } else {
     res.status(404);
     throw new Error('Product not found');
@@ -57,7 +108,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category, isVeg, spiceLevel } = req.body;
   const imageUrl = req.file ? req.file.path : req.body.imageUrl;
 
   if (!imageUrl) {
@@ -72,6 +123,8 @@ const createProduct = asyncHandler(async (req, res) => {
       price: parseFloat(price),
       category,
       imageUrl,
+      isVeg: isVeg === 'true' || isVeg === true,
+      spiceLevel: spiceLevel || 'Mild',
     },
   });
 
@@ -82,7 +135,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, category, imageUrl } = req.body;
+  const { name, description, price, category, imageUrl, isVeg, spiceLevel } = req.body;
 
   const product = await prisma.product.findUnique({
     where: { id: req.params.id },
@@ -99,6 +152,8 @@ const updateProduct = asyncHandler(async (req, res) => {
         price: price ? parseFloat(price) : product.price,
         category: category || product.category,
         imageUrl: imageUrl || product.imageUrl,
+        isVeg: isVeg !== undefined ? (isVeg === 'true' || isVeg === true) : product.isVeg,
+        spiceLevel: spiceLevel || product.spiceLevel,
       },
     });
 

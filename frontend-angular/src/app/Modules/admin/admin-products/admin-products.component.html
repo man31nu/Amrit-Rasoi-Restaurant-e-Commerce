@@ -1,0 +1,121 @@
+<div class="space-y-8">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <h2 class="text-4xl font-black text-gray-900 tracking-tight">
+        Menu <span class="text-orange-600">Inventory</span>
+      </h2>
+      <p class="text-gray-500 font-medium mt-1">Manage your artisanal culinary offerings.</p>
+    </div>
+    <a
+      routerLink="/admin/products/add"
+      class="bg-orange-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 hover:shadow-2xl hover:shadow-orange-600/20 active:scale-95 transition-all w-fit cursor-pointer"
+    >
+      + Add New Creation
+    </a>
+  </div>
+
+  <!-- Search & Stats Bar -->
+  <div class="flex flex-col md:flex-row gap-4">
+    <div class="relative flex-grow group">
+      <input 
+        type="text" 
+        placeholder="Search by name or category..."
+        class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 shadow-sm focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all outline-none font-bold text-gray-700"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </div>
+    <div class="bg-white border border-gray-100 rounded-2xl px-8 py-4 flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-xl">
+        📦
+      </div>
+      <div>
+        <div class="text-2xl font-black text-gray-900 leading-none">{{ products().length }}</div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-gray-400">Items Total</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div class="bg-white rounded-[2.5rem] shadow-xl shadow-orange-900/5 border border-gray-50 overflow-hidden">
+    @if (loading()) {
+      <div class="flex flex-col items-center justify-center h-64 space-y-4">
+        <div class="w-10 h-10 border-4 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-500 font-bold animate-pulse">Curating your menu...</p>
+      </div>
+    } @else if (filteredProducts().length > 0) {
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-gray-50">
+              <th class="px-8 py-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Creation Details</th>
+              <th class="px-8 py-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Category</th>
+              <th class="px-8 py-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Investment (₹)</th>
+              <th class="px-8 py-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (product of filteredProducts(); track product.id) {
+              <tr class="hover:bg-orange-50/30 transition-colors group">
+                <td class="px-8 py-5">
+                  <div class="flex items-center gap-4">
+                    <div class="relative w-14 h-14 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
+                      <img
+                        [src]="product.imageUrl"
+                        [alt]="product.name"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <div>
+                      <div class="font-black text-gray-900 text-lg leading-tight">{{ product.name }}</div>
+                      <div class="text-xs text-gray-400 font-bold mt-1 max-w-xs truncate">
+                        {{ product.description }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-8 py-5">
+                  <span class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-full text-[10px] font-black uppercase tracking-wider">
+                    {{ product.category }}
+                  </span>
+                </td>
+                <td class="px-8 py-5">
+                  <div class="flex items-center gap-1 font-black text-gray-900">
+                    <span class="text-orange-600">₹</span>{{ product.price }}
+                  </div>
+                </td>
+                <td class="px-8 py-5 text-right">
+                  <div class="flex justify-end gap-2">
+                    <a
+                      [routerLink]="['/admin/products/edit', product.id]"
+                      class="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer"
+                      title="Refine Creation"
+                    >
+                      ✏️
+                    </a>
+                    <button
+                      (click)="deleteHandler(product.id)"
+                      class="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+                      title="Retire Creation"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center py-24 text-center">
+        <div class="w-20 h-20 bg-gray-50 text-gray-300 rounded-[2rem] flex items-center justify-center mb-6 text-4xl">
+          📦
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 mb-2">Inventory Empty</h3>
+        <p class="text-gray-500 font-medium max-w-sm">No culinary creations found. Start adding your first artisanal dish to the menu.</p>
+      </div>
+    }
+  </div>
+</div>

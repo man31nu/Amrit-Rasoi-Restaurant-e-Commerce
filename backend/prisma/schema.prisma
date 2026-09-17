@@ -18,6 +18,7 @@ model User {
   address   String?
   cart      Cart?
   orders    Order[]
+  reviews   Review[]
 }
 
 model Product {
@@ -27,9 +28,12 @@ model Product {
   price       Float
   category    String
   imageUrl    String
+  isVeg       Boolean     @default(true)
+  spiceLevel  String      @default("Mild")
   createdAt   DateTime    @default(now())
   cartItems   CartItem[]
   orderItems  OrderItem[]
+  reviews     Review[]
 }
 
 model Cart {
@@ -67,4 +71,26 @@ model OrderItem {
   price     Float
   order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  productId String
+  userId    String
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Coupon {
+  id              String    @id @default(uuid())
+  code            String    @unique
+  discountPercent Float
+  minOrderAmount  Float     @default(0)
+  maxDiscount     Float?
+  expiresAt       DateTime?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
 }

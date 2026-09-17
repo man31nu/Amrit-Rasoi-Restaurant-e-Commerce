@@ -1,0 +1,38 @@
+<div class="min-h-screen pt-32 pb-20 flex items-center justify-center bg-gray-50/50">
+  <div class="container mx-auto px-6 max-w-2xl">
+    <div class="bg-white rounded-[3rem] p-12 shadow-2xl shadow-green-600/5 text-center border border-gray-100 animate-fadeUp">
+      <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 text-4xl">
+        ✓
+      </div>
+
+      <h1 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">
+        Order <span class="text-green-600">Successful!</span>
+      </h1>
+
+      <p class="text-gray-500 mb-8 text-lg">
+        Thank you for your purchase. Your delicious meal is being prepared 
+        and will be on its way shortly.
+      </p>
+
+      <div class="bg-gray-50 rounded-2xl p-6 mb-10 border border-gray-100 flex flex-col gap-2">
+        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Confirmation</p>
+        <p class="font-mono text-sm text-gray-600">Payment Verified · Order Placed</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          routerLink="/orders"
+          class="bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg cursor-pointer"
+        >
+          <span>🛍️</span> View My Orders
+        </a>
+        <a
+          routerLink="/"
+          class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm cursor-pointer"
+        >
+          Back to Menu ➔
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

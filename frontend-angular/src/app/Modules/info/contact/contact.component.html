@@ -1,0 +1,114 @@
+<div class="min-h-screen pt-32 pb-16 bg-gray-50/30">
+  <div class="container mx-auto px-6 max-w-6xl">
+    <div class="text-center mb-16">
+      <div class="inline-block p-4 bg-orange-100 rounded-2xl mb-6 text-orange-600 text-3xl">
+        ✉️
+      </div>
+      <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4 tracking-tighter">
+        Get in <span class="text-orange-600">Touch</span>
+      </h1>
+      <p class="text-gray-500 max-w-xl mx-auto font-medium">
+        Have a question or feedback? We'd love to hear from you. Our team is usually responsive within 24 hours.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Contact Details -->
+      <div class="lg:col-span-1 space-y-6">
+        @for (info of contactInfos; track info.title) {
+          <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-6 group hover:shadow-xl hover:shadow-orange-600/5 hover:translate-x-2 transition-all">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-transform group-hover:scale-110" [ngClass]="[info.bg, info.color]">
+              {{ info.emoji }}
+            </div>
+            <div>
+              <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{{ info.title }}</h3>
+              <p class="text-lg font-black text-gray-900 tracking-tight">{{ info.details }}</p>
+            </div>
+          </div>
+        }
+
+        <!-- Map Card -->
+        <div class="bg-gray-900 rounded-[2.5rem] p-8 aspect-square relative overflow-hidden group">
+          <div class="relative z-10">
+            <h4 class="text-white font-black text-2xl mb-4">Find Us on Google Maps</h4>
+            <p class="text-white/60 mb-8 text-sm">Experience our artisan flavors in person. We are located in the heart of Bhagalpur.</p>
+            <button class="bg-orange-600 text-white px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-orange-600/30 cursor-pointer">
+              Get Directions
+            </button>
+          </div>
+          <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-orange-600/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-[3rem] p-8 md:p-12 shadow-sm border border-gray-100">
+          <form (ngSubmit)="handleSubmit()" class="space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-2">
+                <label class="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">Your Name</label>
+                <input
+                  type="text"
+                  required
+                  [(ngModel)]="name"
+                  name="name"
+                  class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 text-gray-900 font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  [(ngModel)]="email"
+                  name="email"
+                  class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 text-gray-900 font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+                  placeholder="john@example.com"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">Subject</label>
+              <input
+                type="text"
+                required
+                [(ngModel)]="subject"
+                name="subject"
+                class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 text-gray-900 font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+                placeholder="How can we help?"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-xs font-black text-gray-400 uppercase tracking-widest ml-2">Message</label>
+              <textarea
+                required
+                rows="6"
+                [(ngModel)]="message"
+                name="message"
+                class="w-full bg-gray-50 border-none rounded-[2rem] py-4 px-6 text-gray-900 font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none resize-none"
+                placeholder="Type your message here..."
+              ></textarea>
+            </div>
+
+            <div class="pt-4 flex justify-end">
+              <button
+                type="submit"
+                [disabled]="isSubmitting()"
+                class="group bg-orange-600 hover:bg-orange-700 text-white px-12 py-5 rounded-[2rem] font-black shadow-2xl shadow-orange-600/30 transition-all active:scale-95 flex items-center gap-3 disabled:opacity-70 cursor-pointer"
+              >
+                @if (isSubmitting()) {
+                  <div class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                } @else {
+                  <span>Send Message 🚀</span>
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

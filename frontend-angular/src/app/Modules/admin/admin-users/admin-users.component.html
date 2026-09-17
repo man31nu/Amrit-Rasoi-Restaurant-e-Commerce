@@ -1,0 +1,55 @@
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+  @if (loading()) {
+    <div class="p-8 text-center animate-pulse text-gray-500 font-bold">Loading users...</div>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100">
+            <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">User</th>
+            <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Role</th>
+            <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Joined</th>
+            <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          @for (user of users(); track user.id) {
+            <tr class="hover:bg-gray-50/50 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-black">
+                    {{ user.name.charAt(0).toUpperCase() }}
+                  </div>
+                  <div>
+                    <p class="font-bold text-gray-900">{{ user.name }}</p>
+                    <div class="text-xs text-gray-500">{{ user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                  [ngClass]="user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'"
+                >
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                {{ formatDate(user.createdAt) }}
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button
+                  (click)="toggleRole(user)"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer"
+                  [ngClass]="user.role === 'admin' ? 'text-red-600 hover:bg-red-50' : 'text-orange-600 hover:bg-orange-50'"
+                >
+                  {{ user.role === 'admin' ? 'Demote to User' : 'Promote to Admin' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

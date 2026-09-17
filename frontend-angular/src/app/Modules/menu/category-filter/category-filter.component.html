@@ -1,0 +1,15 @@
+<div class="flex items-center gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+  @for (category of categories; track category.id) {
+    <button
+      (click)="selectCategory(category.id)"
+      class="flex items-center gap-2 px-6 py-3 rounded-2xl whitespace-nowrap transition-all duration-300 font-bold text-sm shadow-sm hover:shadow-md border cursor-pointer hover:-translate-y-0.5 active:scale-95"
+      [ngClass]="{
+        'bg-orange-600 text-white border-orange-600 shadow-orange-600/20': selectedCategory === category.id,
+        'bg-white text-gray-600 border-gray-100 hover:border-orange-200 hover:text-orange-600': selectedCategory !== category.id
+      }"
+    >
+      <span>{{ category.emoji }}</span>
+      <span>{{ category.name }}</span>
+    </button>
+  }
+</div>

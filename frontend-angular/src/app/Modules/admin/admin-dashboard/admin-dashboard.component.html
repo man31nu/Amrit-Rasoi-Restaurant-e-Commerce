@@ -1,0 +1,97 @@
+<div class="flex min-h-screen bg-[#f8fafc] pt-20">
+  <!-- Sidebar -->
+  <div class="w-72 bg-white border-r border-gray-100 flex flex-col sticky top-20 h-[calc(100vh-5rem)] shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+    <div class="p-8">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 bg-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200 text-white text-xl">
+          📊
+        </div>
+        <span class="text-2xl font-black text-gray-900 tracking-tighter">
+          RESTO<span class="text-orange-600 text-[10px] align-top ml-1">ADMIN</span>
+        </span>
+      </div>
+      <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Management Portal</p>
+    </div>
+
+    <nav class="flex-1 px-4 mt-4 space-y-2">
+      @for (item of menuItems; track item.id) {
+        <button
+          (click)="activeTab.set(item.id)"
+          class="w-full group flex items-center gap-3 px-6 py-4 rounded-2xl text-sm font-bold transition-all relative overflow-hidden cursor-pointer"
+          [ngClass]="{
+            'text-orange-600 bg-orange-50/50': activeTab() === item.id,
+            'text-gray-500 hover:text-gray-900 hover:bg-gray-50': activeTab() !== item.id
+          }"
+        >
+          @if (activeTab() === item.id) {
+            <div class="absolute left-0 w-1.5 h-6 bg-orange-600 rounded-r-full"></div>
+          }
+          <span class="text-xl transition-transform group-hover:scale-110">
+            {{ item.emoji }}
+          </span>
+          <span class="flex-1 text-left">{{ item.label }}</span>
+          @if (activeTab() === item.id) {
+            <span class="text-orange-400">➔</span>
+          }
+        </button>
+      }
+    </nav>
+
+    <div class="p-6 mt-auto">
+      <div class="bg-gray-900 rounded-[2rem] p-6 relative overflow-hidden group">
+        <div class="relative z-10">
+          <p class="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-1">System Status</p>
+          <h4 class="text-white font-black text-lg mb-4">All Systems Live</h4>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+            <span class="text-green-400 text-xs font-bold">Encrypted Connection</span>
+          </div>
+        </div>
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-600/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+    <header class="bg-white/80 backdrop-blur-md px-10 py-6 border-b border-gray-100 flex justify-between items-center z-20">
+      <div>
+        <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+          <span>Admin</span>
+          <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+          <span class="text-orange-600 uppercase">{{ activeTab() }}</span>
+        </div>
+        <h2 class="text-3xl font-black text-gray-900 tracking-tight">
+          {{ getActiveTitle() }}
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="flex flex-col text-right">
+          <span class="text-sm font-bold text-gray-900">{{ authService.user()?.name }}</span>
+          <span class="text-[10px] font-bold text-green-600 uppercase">Superuser</span>
+        </div>
+        <div class="w-12 h-12 bg-gray-100 rounded-2xl border-2 border-white shadow-sm flex items-center justify-center font-black text-gray-700">
+          {{ authService.user()?.name?.slice(0,2)?.toUpperCase() || 'AD' }}
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-10 bg-[#f8fafc]">
+      @switch (activeTab()) {
+        @case ('stats') {
+          <app-admin-analytics></app-admin-analytics>
+        }
+        @case ('products') {
+          <app-admin-products></app-admin-products>
+        }
+        @case ('orders') {
+          <app-admin-orders></app-admin-orders>
+        }
+        @case ('users') {
+          <app-admin-users></app-admin-users>
+        }
+      }
+    </main>
+  </div>
+</div>
