@@ -34,4 +34,6 @@ yarn-error.log*
 vercel.json
 .angular/
 
-
+# Legacy and helper scripts
+backend/prisma/
+backend/scripts/
