@@ -86,7 +86,7 @@ export class OrderService {
     this.createOrder(items, totalAmount).subscribe({
       next: (res: any) => {
         const options = {
-          key: environment.razorpayKey,
+          key: res.razorpayKeyId,
           amount: res.amount,
           currency: res.currency || 'INR',
           name: environment.appName,
@@ -113,7 +113,7 @@ export class OrderService {
           prefill: {
             name: user.name,
             email: user.email,
-            contact: user.phone || '9999999999',
+            contact: user.phone || '',
           },
           theme: {
             color: '#ea580c',

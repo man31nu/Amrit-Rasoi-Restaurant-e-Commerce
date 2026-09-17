@@ -80,8 +80,12 @@ module.exports = {
     const orderNum = `AR-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
     const amountPaise = Math.round(finalTotalAmount * 100);
 
-    const keyId = (process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder').trim();
-    const keySecret = (process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret').trim();
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      throw new Error('Payment service is not configured. Please contact support.');
+    }
+
+    const keyId = process.env.RAZORPAY_KEY_ID.trim();
+    const keySecret = process.env.RAZORPAY_KEY_SECRET.trim();
 
     const rzp = new Razorpay({
       key_id: keyId,
@@ -112,6 +116,7 @@ module.exports = {
     });
 
     return {
+      razorpayKeyId: keyId,
       orderId: razorpayOrder.id,
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
