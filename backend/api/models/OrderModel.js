@@ -70,7 +70,7 @@ module.exports = {
 
   updatePaymentStatus: async (dbOrderId, transactionId, userId) => {
     const updateResult = await db.query(
-      `UPDATE orders SET status = 'paid', payment_status = 'paid', transaction_id = $1, updated_by = $2, updated_at = CURRENT_TIMESTAMP WHERE order_id = $3 RETURNING order_id AS "id", user_id AS "userId", order_number AS "orderNumber", total_amount AS "totalAmount", status, payment_status AS "paymentStatus", created_at AS "createdAt"`,
+      `UPDATE orders SET status = 'paid', payment_status = 'paid', transaction_id = $1, updated_by = $2, updated_at = CURRENT_TIMESTAMP WHERE order_id = $3 RETURNING order_id AS "id", user_id AS "userId", order_number AS "orderNumber", total_amount AS "totalAmount", status, payment_status AS "paymentStatus", (EXTRACT(EPOCH FROM created_at) * 1000)::bigint AS "createdAt"`,
       [transactionId, userId, dbOrderId]
     );
 
@@ -94,7 +94,7 @@ module.exports = {
         o.payment_status AS "paymentStatus",
         o.delivery_address AS "deliveryAddress",
         o.status,
-        o.created_at AS "createdAt",
+        (EXTRACT(EPOCH FROM o.created_at) * 1000)::bigint AS "createdAt",
         COALESCE(
           json_agg(
             json_build_object(
@@ -146,7 +146,7 @@ module.exports = {
         o.payment_status AS "paymentStatus",
         o.delivery_address AS "deliveryAddress",
         o.status,
-        o.created_at AS "createdAt",
+        (EXTRACT(EPOCH FROM o.created_at) * 1000)::bigint AS "createdAt",
         json_build_object(
           'name', u.name,
           'email', u.email,
@@ -188,7 +188,7 @@ module.exports = {
 
   updateOrderStatus: async (orderId, status, updatedBy) => {
     const updateResult = await db.query(
-      `UPDATE orders SET status = $1, updated_by = $2, updated_at = CURRENT_TIMESTAMP WHERE order_id = $3 RETURNING order_id AS "id", user_id AS "userId", order_number AS "orderNumber", total_amount AS "totalAmount", status, payment_status AS "paymentStatus", created_at AS "createdAt"`,
+      `UPDATE orders SET status = $1, updated_by = $2, updated_at = CURRENT_TIMESTAMP WHERE order_id = $3 RETURNING order_id AS "id", user_id AS "userId", order_number AS "orderNumber", total_amount AS "totalAmount", status, payment_status AS "paymentStatus", (EXTRACT(EPOCH FROM created_at) * 1000)::bigint AS "createdAt"`,
       [status, updatedBy, orderId]
     );
 

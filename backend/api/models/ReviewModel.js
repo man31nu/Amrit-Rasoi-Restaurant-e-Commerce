@@ -21,7 +21,7 @@ module.exports = {
     const insertQuery = `
       INSERT INTO reviews (product_id, user_id, user_name, user_avatar, rating, title, comment, created_by, updated_by)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
-      RETURNING review_id AS "id", review_id AS "reviewId", rating, title, comment, product_id AS "productId", user_id AS "userId", user_name AS "userName", user_avatar AS "userAvatar", is_verified_buyer AS "isVerifiedBuyer", created_at AS "createdAt"
+      RETURNING review_id AS "id", review_id AS "reviewId", rating, title, comment, product_id AS "productId", user_id AS "userId", user_name AS "userName", user_avatar AS "userAvatar", is_verified_buyer AS "isVerifiedBuyer", (EXTRACT(EPOCH FROM created_at) * 1000)::bigint AS "createdAt"
     `;
 
     const { rows } = await db.query(insertQuery, [
@@ -49,7 +49,7 @@ module.exports = {
     const queryText = `
       SELECT r.review_id AS "id", r.review_id AS "reviewId", r.rating, r.title, r.comment, r.product_id AS "productId", r.user_id AS "userId", 
         r.user_name AS "userName", r.user_avatar AS "userAvatar", r.is_verified_buyer AS "isVerifiedBuyer",
-        r.created_at AS "createdAt",
+        (EXTRACT(EPOCH FROM r.created_at) * 1000)::bigint AS "createdAt",
         json_build_object('id', u.user_id, 'name', u.name, 'avatarUrl', u.avatar_url) as user
       FROM reviews r
       JOIN users u ON r.user_id = u.user_id

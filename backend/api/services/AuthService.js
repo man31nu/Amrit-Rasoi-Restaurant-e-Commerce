@@ -155,37 +155,30 @@ module.exports = {
   },
 
   updateProfile: async (userId, payload) => {
-    const currentUser = await UserModel.findById(userId);
-    if (!currentUser) {
+    const { name, email, phone, address, city, pincode, avatarUrl, password, updatedBy } = payload;
+
+    let hashedPassword = null;
+    if (password && password.trim()) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(password.trim(), salt);
+    }
+
+    const updatedUser = await UserModel.updateProfile(userId, {
+      name,
+      email,
+      phone,
+      address,
+      city,
+      pincode,
+      avatarUrl,
+      password: hashedPassword,
+      updatedBy
+    });
+
+    if (!updatedUser) {
       throw new Error('User not found');
     }
 
-    const { name, email, phone, address, city, pincode, avatarUrl, password, updatedBy } = payload;
-
-    const updatedName = name || currentUser.name;
-    const updatedEmail = email || currentUser.email;
-    const updatedPhone = phone !== undefined ? phone : currentUser.phone;
-    const updatedAddress = address !== undefined ? address : currentUser.address;
-    const updatedCity = city !== undefined ? city : currentUser.city;
-    const updatedPincode = pincode !== undefined ? pincode : currentUser.pincode;
-    const updatedAvatarUrl = avatarUrl !== undefined ? avatarUrl : currentUser.avatarUrl;
-    
-    let updatedPass = currentUser.password;
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      updatedPass = await bcrypt.hash(password, salt);
-    }
-
-    return await UserModel.updateProfile(userId, {
-      name: updatedName,
-      email: updatedEmail,
-      phone: updatedPhone,
-      address: updatedAddress,
-      city: updatedCity,
-      pincode: updatedPincode,
-      avatarUrl: updatedAvatarUrl,
-      password: updatedPass,
-      updatedBy
-    });
+    return updatedUser;
   }
 };
