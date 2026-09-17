@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, map } from 'rxjs';
 import { User } from '@models';
 import { ToastService } from './toast.service';
 import { environment } from '@environments/environment';
@@ -32,7 +32,8 @@ export class AuthService {
   isAdmin = computed(() => this.user()?.role === 'admin');
 
   signup(data: { name: string; email: string; password: string }): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/signup`, data).pipe(
+    return this.http.post<any>(`${this.apiUrl}/signup`, data).pipe(
+      map((res) => res.data || res),
       tap({
         next: (user) => {
           this.setUser(user);
@@ -46,7 +47,8 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string }): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, data).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
+      map((res) => res.data || res),
       tap({
         next: (user) => {
           this.setUser(user);
@@ -54,6 +56,21 @@ export class AuthService {
         },
         error: (err) => {
           this.toast.error(err.error?.message || 'Invalid email or password');
+        },
+      })
+    );
+  }
+
+  loginWithGoogle(credential: string): Observable<User> {
+    return this.http.post<any>(`${this.apiUrl}/google`, { credential }).pipe(
+      map((res) => res.data || res),
+      tap({
+        next: (user) => {
+          this.setUser(user);
+          this.toast.success(`Welcome to Amrit Rasoi, ${user.name}!`);
+        },
+        error: (err) => {
+          this.toast.error(err.error?.message || 'Google Sign-In failed');
         },
       })
     );
@@ -67,11 +84,14 @@ export class AuthService {
   }
 
   getProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/profile`);
+    return this.http.get<any>(`${this.apiUrl}/profile`).pipe(
+      map((res) => res.data || res)
+    );
   }
 
   updateProfile(data: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/profile`, data).pipe(
+    return this.http.put<any>(`${this.apiUrl}/profile`, data).pipe(
+      map((res) => res.data || res),
       tap({
         next: (updatedUser) => {
           const current = this.user();
@@ -88,11 +108,15 @@ export class AuthService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
+    return this.http.get<any>(`${this.apiUrl}/users`).pipe(
+      map((res) => res.data || res)
+    );
   }
 
-  updateUserRole(userId: string, role: 'user' | 'admin'): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/users/${userId}/role`, { role });
+  updateUserRole(userId: string, role: 'customer' | 'admin' | 'user'): Observable<User> {
+    return this.http.put<any>(`${this.apiUrl}/users/${userId}/role`, { role }).pipe(
+      map((res) => res.data || res)
+    );
   }
 
   setUser(user: User) {

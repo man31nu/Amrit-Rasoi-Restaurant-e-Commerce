@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Product } from '@models';
 import { environment } from '@environments/environment';
 
@@ -27,22 +27,32 @@ export class ProductService {
     if (filters?.isVeg && filters.isVeg !== 'all') params = params.set('isVeg', filters.isVeg);
     if (filters?.spiceLevel && filters.spiceLevel !== 'all') params = params.set('spiceLevel', filters.spiceLevel);
 
-    return this.http.get<Product[]>(this.apiUrl, { params });
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(res => res.data || res)
+    );
   }
 
   getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(res => res.data || res)
+    );
   }
 
   createProduct(data: FormData): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, data);
+    return this.http.post<any>(this.apiUrl, data).pipe(
+      map(res => res.data || res)
+    );
   }
 
   updateProduct(id: string, data: FormData | Partial<Product>): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, data);
+    return this.http.put<any>(`${this.apiUrl}/${id}`, data).pipe(
+      map(res => res.data || res)
+    );
   }
 
   deleteProduct(id: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
+      map(res => res.data || res)
+    );
   }
 }

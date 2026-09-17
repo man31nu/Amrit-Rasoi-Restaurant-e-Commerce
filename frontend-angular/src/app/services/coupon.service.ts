@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Coupon, AppliedCoupon } from '@models';
 import { environment } from '@environments/environment';
 
@@ -12,10 +12,14 @@ export class CouponService {
   private apiUrl = `${environment.apiUrl}/coupons`;
 
   getAvailableCoupons(): Observable<Coupon[]> {
-    return this.http.get<Coupon[]>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(res => res.data || res)
+    );
   }
 
   applyCoupon(code: string, subtotal: number): Observable<AppliedCoupon> {
-    return this.http.post<AppliedCoupon>(`${this.apiUrl}/apply`, { code, subtotal });
+    return this.http.post<any>(`${this.apiUrl}/apply`, { code, subtotal }).pipe(
+      map(res => res.data || res)
+    );
   }
 }

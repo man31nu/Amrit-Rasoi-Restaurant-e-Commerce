@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Order, AnalyticsData } from '@models';
 import { ToastService } from './toast.service';
 import { Router } from '@angular/router';
@@ -22,19 +22,27 @@ export class OrderService {
   private apiUrl = `${environment.apiUrl}/orders`;
 
   getMyOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/myorders`);
+    return this.http.get<any>(`${this.apiUrl}/my-orders`).pipe(
+      map(res => res.data || res)
+    );
   }
 
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/all`);
+    return this.http.get<any>(`${this.apiUrl}/all-orders`).pipe(
+      map(res => res.data || res)
+    );
   }
 
   updateOrderStatus(orderId: string, status: string): Observable<Order> {
-    return this.http.put<Order>(`${this.apiUrl}/${orderId}/status`, { status });
+    return this.http.put<any>(`${this.apiUrl}/${orderId}/status`, { status }).pipe(
+      map(res => res.data || res)
+    );
   }
 
   getAnalytics(): Observable<AnalyticsData> {
-    return this.http.get<AnalyticsData>(`${this.apiUrl}/analytics`);
+    return this.http.get<any>(`${this.apiUrl}/analytics`).pipe(
+      map(res => res.data || res)
+    );
   }
 
   createOrder(items: { productId: string; quantity: number; price: number }[], totalAmount: number): Observable<{
@@ -44,7 +52,9 @@ export class OrderService {
     currency: string;
     dbOrderId: string;
   }> {
-    return this.http.post<any>(`${this.apiUrl}/create`, { items, totalAmount });
+    return this.http.post<any>(`${this.apiUrl}/create-order`, { items, totalAmount }).pipe(
+      map(res => res.data || res)
+    );
   }
 
   verifyPayment(data: {
@@ -53,7 +63,13 @@ export class OrderService {
     razorpay_signature: string;
     dbOrderId: string;
   }): Observable<{ success: boolean; message: string; order: Order }> {
-    return this.http.post<any>(`${this.apiUrl}/verify`, data);
+    return this.http.post<any>(`${this.apiUrl}/verify-payment`, data).pipe(
+      map(res => ({
+        success: res.success !== undefined ? res.success : true,
+        message: res.message || 'Payment verified',
+        order: res.data || res.order || res
+      }))
+    );
   }
 
   checkoutWithRazorpay(
@@ -68,7 +84,7 @@ export class OrderService {
     }
 
     this.createOrder(items, totalAmount).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         const options = {
           key: environment.razorpayKey,
           amount: res.amount,

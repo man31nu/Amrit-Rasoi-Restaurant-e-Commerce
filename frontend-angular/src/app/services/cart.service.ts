@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { tap, map } from 'rxjs';
 import { CartItem } from '@models';
 import { ToastService } from './toast.service';
 import { AuthService } from './auth.service';
@@ -33,9 +33,11 @@ export class CartService {
     }
 
     this.loading.set(true);
-    this.http.get<{ items: CartItem[] }>(this.apiUrl).subscribe({
-      next: (data) => {
-        this.items.set(data.items || []);
+    this.http.get<any>(this.apiUrl).pipe(
+      map(res => res.data || res)
+    ).subscribe({
+      next: (cartData) => {
+        this.items.set(cartData?.items || []);
         this.loading.set(false);
       },
       error: () => {
@@ -50,10 +52,11 @@ export class CartService {
       return;
     }
 
-    this.http.post<{ items: CartItem[] }>(this.apiUrl, { productId, quantity }).pipe(
+    this.http.post<any>(this.apiUrl, { productId, quantity }).pipe(
+      map(res => res.data || res),
       tap({
-        next: (res) => {
-          this.items.set(res.items || []);
+        next: (cartData) => {
+          this.items.set(cartData?.items || []);
           this.toast.success('Item added to cart!');
         },
         error: (err) => {
@@ -64,10 +67,11 @@ export class CartService {
   }
 
   updateQuantity(itemId: string, quantity: number) {
-    this.http.put<{ items: CartItem[] }>(`${this.apiUrl}/${itemId}`, { quantity }).pipe(
+    this.http.put<any>(`${this.apiUrl}/${itemId}`, { quantity }).pipe(
+      map(res => res.data || res),
       tap({
-        next: (res) => {
-          this.items.set(res.items || []);
+        next: (cartData) => {
+          this.items.set(cartData?.items || []);
         },
         error: (err) => {
           this.toast.error(err.error?.message || 'Failed to update quantity');
@@ -77,10 +81,11 @@ export class CartService {
   }
 
   removeFromCart(itemId: string) {
-    this.http.delete<{ items: CartItem[] }>(`${this.apiUrl}/${itemId}`).pipe(
+    this.http.delete<any>(`${this.apiUrl}/${itemId}`).pipe(
+      map(res => res.data || res),
       tap({
-        next: (res) => {
-          this.items.set(res.items || []);
+        next: (cartData) => {
+          this.items.set(cartData?.items || []);
           this.toast.info('Item removed from cart');
         },
         error: (err) => {
