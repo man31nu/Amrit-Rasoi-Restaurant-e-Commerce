@@ -16,7 +16,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Database (if applicable)
-# prisma/migration_lock.toml (if using prisma, usually kept but sometimes ignored)
+prisma/
+scripts/
 
 # Editor
 .vscode/

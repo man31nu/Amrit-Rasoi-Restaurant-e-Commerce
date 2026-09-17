@@ -31,7 +31,6 @@ yarn-error.log*
 
 # Misc
 .vercel/
-vercel.json
 .angular/
 
 # Legacy and helper scripts
